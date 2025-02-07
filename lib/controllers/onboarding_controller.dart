@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
+import 'package:sleepcyclesapp/utils/hive_database.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 
 class OnBoardingScreenController extends GetxController {
@@ -10,7 +11,7 @@ class OnBoardingScreenController extends GetxController {
 
   next() {
     if (currentPage > 3) {
-      print("---> end");
+      HiveDatabase.db.put("onBoarding", true);
       Get.toNamed(AppRoutes.welcomeScreen);
       return;
       // goo to app

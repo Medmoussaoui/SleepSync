@@ -1,6 +1,6 @@
 import 'package:sleepcyclesapp/Data/onboarding_data.dart';
-import 'package:sleepcyclesapp/models/onboarding_model.dart';
+import 'package:sleepcyclesapp/entitys/onboarding_entity.dart';
 
 class LocalData {
-  static List<OnBoardingModel> onBoarding = onBoardingData;
+  static List<OnBoardingEntity> onBoarding = onBoardingData;
 }

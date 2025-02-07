@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
-import 'package:sleepcyclesapp/view/onBoarding/see_the_sience.dart';
+import 'package:sleepcyclesapp/view/widgets/onBoarding/see_the_sience.dart';
 
 class OnBoardingProgress extends StatelessWidget {
   final void Function()? onTap;

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
 
 class CustomSwitchButton extends StatelessWidget {

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sleepcyclesapp/Data/index.dart';
-import 'package:sleepcyclesapp/Data/onboarding_data.dart';
-import 'package:sleepcyclesapp/controllers/onboedin_controller.dart';
+import 'package:sleepcyclesapp/controllers/onboarding_controller.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
-import 'package:sleepcyclesapp/view/onBoarding/onboarding_content.dart';
-import 'package:sleepcyclesapp/view/onBoarding/onboarding_progress.dart';
+import 'package:sleepcyclesapp/view/widgets/onBoarding/onboarding_content.dart';
+import 'package:sleepcyclesapp/view/widgets/onBoarding/onboarding_progress.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
