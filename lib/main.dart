@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fullscreen_window/fullscreen_window.dart';
 import 'package:get/get.dart';
 import 'package:sleepcyclesapp/routes.dart';
+import 'package:sleepcyclesapp/utils/colors.dart';
 import 'package:sleepcyclesapp/utils/hive_database.dart';
+import 'package:sleepcyclesapp/utils/music_player.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-// Hide the bottom navigation bar
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-
-  // Blend status bar and navigation bar with the background color
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, //Color(0xFF233050), // Match your background color
-    statusBarIconBrightness: Brightness.light, // Light icons for contrast
-    systemNavigationBarColor:
-        Color(0xFF233050), // Match bottom bar with background
-    systemNavigationBarIconBrightness:
-        Brightness.light, // Light icons for contrast
-  ));
-
+  AppAudioPlayer.initial();
+  FullScreenWindow.setFullScreen(true); // enter fullscreen
   await HiveDatabase.initial();
   runApp(const MyApp());
 }
@@ -35,6 +26,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.onBoardingScreen,
       getPages: pages,
+      theme: ThemeData(
+        applyElevationOverlayColor: false, // Prevents dark mode color filtering
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(color: AppColors.white),
+        ),
+      ),
     );
   }
 }

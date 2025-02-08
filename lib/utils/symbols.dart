@@ -16,4 +16,6 @@ class AppIcons {
   static String vebration = "$root/vebration.png";
   static String volume = "$root/volume.png";
   static String wakeup = "$root/wakeup.png";
+  static String settings = "$root/settings.png";
+  static String arrowback = "$root/arrowback.png";
 }

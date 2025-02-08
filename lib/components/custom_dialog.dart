@@ -40,11 +40,11 @@ class CustomDialog extends StatelessWidget {
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(15),
             child: Container(
-              margin: EdgeInsets.only(left: 15, right: 15, bottom: 30),
+              margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.black,
+               color: AppColors.black,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -73,7 +73,7 @@ class CustomDialog extends StatelessWidget {
             ),
           ),
         ).animate().moveY(
-              begin: 100,
+              begin: 70,
               end: 0,
               duration: 1000.ms,
               curve: Curves.elasticOut,

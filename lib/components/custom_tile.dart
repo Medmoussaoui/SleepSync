@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sleepcyclesapp/components/custom_icon.dart';
+import 'package:sleepcyclesapp/utils/symbols.dart';
 import 'package:sleepcyclesapp/utils/text_styles.dart';
 
 class CustomTile extends StatelessWidget {
@@ -30,6 +32,7 @@ class CustomTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+
       borderRadius: BorderRadius.circular(13),
       onTap: onTap,
       child: Container(
@@ -59,16 +62,20 @@ class CustomTile extends StatelessWidget {
                     style: AppTextStyles.headline5regular,
                   ),
                   if (subtitle != null)
-                    Text(
-                      subtitle!,
-                      style: AppTextStyles.subtitle4Light,
+                    FittedBox(
+                      child: Text(
+                        subtitle!,
+                        style: AppTextStyles.subtitle4Light,
+                      ),
                     ),
                 ],
               ),
             ),
 
             // Custom Trailing Widget
-            if (trailingWidget != null) trailingWidget!,
+            trailingWidget != null
+                ? trailingWidget!
+                : CustomIcon(icon: AppIcons.arrow, size: 18),
           ],
         ),
       ),

@@ -8,6 +8,7 @@ class ClockCounter extends StatefulWidget {
   final int initialValue;
   final Function(int value) onMoving;
   final Function(int value) onChange;
+  final Function(int value)? onDone;
 
   const ClockCounter({
     super.key,
@@ -16,6 +17,7 @@ class ClockCounter extends StatefulWidget {
     required this.onMoving,
     required this.onChange,
     required this.initialValue,
+    this.onDone,
   });
 
   @override
@@ -46,6 +48,7 @@ class ClockCounterState extends State<ClockCounter> {
       if (newValue >= widget.min && newValue <= widget.max) {
         value = newValue;
         rotationAngle += angle;
+        widget.onChange(value);
         setState(() {});
       }
 
@@ -55,6 +58,7 @@ class ClockCounterState extends State<ClockCounter> {
       rotationAngle += angle; // السماح بحركة سلسة حتى بدون تغيير العدد
       setState(() {});
     }
+    widget.onMoving(value);
   }
 
   @override
@@ -62,6 +66,9 @@ class ClockCounterState extends State<ClockCounter> {
     return Center(
       child: GestureDetector(
         onVerticalDragUpdate: _onVerticalDragUpdate,
+        onVerticalDragEnd: (details) {
+          if (widget.onDone != null) widget.onDone!(value);
+        },
         child: Transform.rotate(
           angle: rotationAngle,
           child: Image.asset(
@@ -70,42 +77,6 @@ class ClockCounterState extends State<ClockCounter> {
             height: 300,
           ),
         ).animate().fade(duration: 500.ms),
-        // child: Stack(
-        //   alignment: Alignment.center,
-        //   children: [
-        //     Transform.rotate(
-        //       angle: rotationAngle,
-        //       child: Image.asset(
-        //         AppImages.testClock,
-        //         width: 300,
-        //         height: 300,
-        //       ),
-        //     ).animate().fade(duration: 500.ms),
-        //     Column(
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         AnimatedSwitcher(
-        //           duration: 300.ms,
-        //           transitionBuilder: (child, animation) =>
-        //               FadeTransition(opacity: animation, child: child),
-        //           child: Text(
-        //             '$value',
-        //             key: ValueKey(value),
-        //             style: const TextStyle(
-        //               fontSize: 50,
-        //               fontWeight: FontWeight.bold,
-        //               color: Colors.white,
-        //             ),
-        //           ),
-        //         ),
-        //         Text(
-        //           widget.hint,
-        //           style: TextStyle(fontSize: 18, color: Colors.white70),
-        //         ).animate().fade(duration: 800.ms).slideY(),
-        //       ],
-        //     )
-        //   ],
-        // ),
       ),
     );
   }

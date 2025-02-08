@@ -17,7 +17,7 @@ class CustomSwitchButton extends StatelessWidget {
         activeTrackColor: AppColors.primaryBtnColor,
         inactiveTrackColor: AppColors.white.withOpacity(0.2),
         inactiveThumbColor: AppColors.white.withOpacity(0.5),
-        onChanged: (state) {},
+        onChanged: onChanged,
       ),
     );
   }
