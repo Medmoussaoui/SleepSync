@@ -7,12 +7,15 @@ import 'package:sleepcyclesapp/components/custom_dialog.dart';
 import 'package:sleepcyclesapp/components/custom_icon.dart';
 import 'package:sleepcyclesapp/components/custom_tile.dart';
 import 'package:sleepcyclesapp/components/primary_button.dart';
+import 'package:sleepcyclesapp/models/alarm_sound_model.dart';
 import 'package:sleepcyclesapp/utils/animations.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
+import 'package:sleepcyclesapp/utils/functions/truncate_text.dart';
 import 'package:sleepcyclesapp/utils/symbols.dart';
 
 class SelectAlarmSound extends StatelessWidget {
-  const SelectAlarmSound({super.key});
+  final Function(AlarmSoundModel sound) onSave;
+  const SelectAlarmSound({super.key, required this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +33,10 @@ class SelectAlarmSound extends StatelessWidget {
               // controller.selectCustomSound();
               return GetX<SelectAlarmSoundController>(
                 builder: (con) {
+                  bool isSelected = controller.selectedSound.value == index;
                   return CustomSoundWidget(
-                    isPlaying: controller.musicPlaying.value &&
-                        controller.customSound.value != null,
+                    isPlaying: isSelected && controller.musicPlaying.value,
                     musicName: controller.alarmSounds[index].name,
-                    isSelected: controller.customSound.value != null,
                     onTap: () {
                       controller.selectCustomSound();
                     },
@@ -46,10 +48,10 @@ class SelectAlarmSound extends StatelessWidget {
               builder: (con) {
                 bool isSelected = controller.selectedSound.value == index;
                 return MusicListTile(
+                  id: index,
                   isPlaying: controller.musicPlaying.value && isSelected,
                   musicName: controller.alarmSounds[index].name,
                   isSelected: isSelected,
-                  id: index,
                   onTap: (index) => controller.selectAlarmSound(index),
                 );
               },
@@ -59,31 +61,32 @@ class SelectAlarmSound extends StatelessWidget {
       ),
       action: PrimaryButton(
         text: "Apply",
-        onPressed: () {},
+        onPressed: () async {
+          final sound = await controller.saveSound();
+          onSave(sound);
+        },
       ),
     );
   }
 }
 
 class CustomSoundWidget extends StatelessWidget {
-  final bool isPlaying;
   final String musicName;
-  final bool isSelected;
+  final bool isPlaying;
   final Function() onTap;
 
   const CustomSoundWidget({
     super.key,
     required this.isPlaying,
-    required this.musicName,
-    required this.isSelected,
     required this.onTap,
+    required this.musicName,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomTile(
       title: "Custom Sounds",
-      subtitle: musicName,
+      subtitle: truncateWithEllipsis(musicName, maxLength: 24),
       borderColor: AppColors.white.withOpacity(0.07),
       leadingIcon: AnimatedSwitcher(
         duration: 300.ms,
@@ -100,9 +103,7 @@ class CustomSoundWidget extends StatelessWidget {
       ),
       trailingWidget: CustomIcon(
         icon: AppIcons.arrow,
-        color: isSelected
-            ? AppColors.primaryBtnColor
-            : AppColors.secondaryTextColor.withOpacity(0.4),
+        color: AppColors.secondaryTextColor.withOpacity(0.4),
       ),
       onTap: () => onTap(),
     );

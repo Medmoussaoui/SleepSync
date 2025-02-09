@@ -51,6 +51,12 @@ class SleepCycleModel {
     return (totalSleepDuration.inMinutes / Settings.cycleMinute).floor();
   }
 
+  double get progress {
+    int cyclesToMitunes = (cycles * Settings.cycleMinute).floor();
+    return ((1 / cyclesToMitunes) * totalSleepDuration.inMinutes)
+        .clamp(0.0, 1.0);
+  }
+
   /// Convert to Map (for database storage)
   Map<String, dynamic> toMap() {
     return {

@@ -7,6 +7,7 @@ import 'package:sleepcyclesapp/components/custom_tile_container.dart';
 import 'package:sleepcyclesapp/components/SelectAlarmSound/dialog.dart';
 import 'package:sleepcyclesapp/controllers/begin_cycles_screen_controller.dart';
 import 'package:sleepcyclesapp/utils/functions/custom_show_dialog.dart';
+import 'package:sleepcyclesapp/utils/functions/truncate_text.dart';
 import 'package:sleepcyclesapp/utils/symbols.dart';
 
 class BeginSleepCylesSetting extends GetView<BeginCyclesScreenController> {
@@ -18,16 +19,27 @@ class BeginSleepCylesSetting extends GetView<BeginCyclesScreenController> {
   Widget build(BuildContext context) {
     return CustomTileContainer(
       children: [
-        CustomTile(
-          padding: false,
-          title: "Wake-Up Alarm Sound",
-          subtitle: "Default, Funy drop the gitar",
-          leadingIcon: CustomIcon(
-            icon: AppIcons.music,
-            background: true,
-          ),
-          onTap: () {
-            customShowDialog(SelectAlarmSound());
+        GetBuilder<BeginCyclesScreenController>(
+          id: "alarmSound",
+          builder: (con) {
+            return CustomTile(
+              padding: false,
+              title: "Wake-Up Alarm Sound",
+              subtitle:  truncateWithEllipsis(controller.alarmSoundName,maxLength: 24) ,
+              leadingIcon: CustomIcon(
+                icon: AppIcons.music,
+                background: true,
+              ),
+              onTap: () {
+                customShowDialog(
+                  SelectAlarmSound(
+                    onSave: (sound) {
+                      controller.onAlarmSoundChange(sound.name);
+                    },
+                  ),
+                );
+              },
+            );
           },
         ),
         GetBuilder<BeginCyclesScreenController>(

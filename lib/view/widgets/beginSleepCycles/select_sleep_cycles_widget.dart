@@ -25,7 +25,7 @@ class SelectSleepCycles extends GetView<BeginCyclesScreenController> {
           min: 1,
           onMoving: (v) {},
           onDone: (v) {
-            AppAudioPlayer.playFromAsset(AppSounds.tick,volume: 0.3);
+            AppAudioPlayer.playFromAsset(AppSounds.tick,volume: 0.1);
           },
           onChange: (v) => controller.setCycles(v),
           initialValue: controller.cycles,

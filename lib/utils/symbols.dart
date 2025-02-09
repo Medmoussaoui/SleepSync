@@ -18,4 +18,5 @@ class AppIcons {
   static String wakeup = "$root/wakeup.png";
   static String settings = "$root/settings.png";
   static String arrowback = "$root/arrowback.png";
+  static String swipeup = "$root/swipeup.png";
 }

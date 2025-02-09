@@ -31,7 +31,7 @@ class SemiCircularProgressBarState extends State<SemiCircularProgressBar> {
           alignment: Alignment.bottomCenter,
           children: [
             CustomPaint(
-              size: const Size(280, 280), // Semi-circle size
+              size: const Size(280, 190), // Semi-circle size
               painter: _SemiCirclePainter(animatedProgress),
             ),
             Align(
@@ -79,13 +79,13 @@ class _SemiCirclePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Paint backgroundPaint = Paint()
       ..color = AppColors.white.withOpacity(0.05)
-      ..strokeWidth = 16
+      ..strokeWidth = 17
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
     final Paint progressPaint = Paint()
       ..color = AppColors.blue
-      ..strokeWidth = 16
+      ..strokeWidth = 17
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 

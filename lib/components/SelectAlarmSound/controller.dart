@@ -1,65 +1,106 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:sleepcyclesapp/entitys/alarm_sound.dart';
-import 'package:sleepcyclesapp/utils/sounds.dart';
+import 'package:sleepcyclesapp/Data/alarm_sounds_data.dart';
+import 'package:sleepcyclesapp/models/alarm_sound_model.dart';
+import 'package:sleepcyclesapp/services/set_custom_alarm_sound.dart';
+import 'package:sleepcyclesapp/utils/settings.dart';
+import 'package:path/path.dart' as p;
 
-final AlarmSoundEntity fakeMusic =
-    AlarmSoundEntity(name: "Choose from this device", path: "/xxx/xxx");
+final noCustomSound = AlarmSoundModel(
+  source: AlarmSoundSource.none,
+  path: "",
+  name: "Chose from this device",
+);
 
 class SelectAlarmSoundController extends GetxController {
+  late final SetAlarmSoundService setAlarmSoundService;
+
   final AudioPlayer audioInstance = AudioPlayer();
-  final RxInt selectedSound =
-      0.obs; // Default selection is the first item (index 0)
-  final Rx<AlarmSoundEntity?> customSound = Rx<AlarmSoundEntity?>(null);
+  late final RxInt selectedSound;
   final RxBool musicPlaying = false.obs;
 
-  final List<AlarmSoundEntity> alarmSounds = [
-    AlarmSoundEntity(name: "Gentle Sunrise", path: "/xxx/xxx"),
-    AlarmSoundEntity(name: "Soft Chimes", path: "/xxx/xxx"),
-    AlarmSoundEntity(name: "Morning Breeze", path: "/xxx/xxx"),
-    fakeMusic,
-  ];
+  late final List<AlarmSoundModel> alarmSounds;
 
-  @override
-  void onInit() {
-    super.onInit();
-    audioInstance.onPlayerComplete.listen((event) {
-      musicPlaying.value = false;
-    });
+  Future<AlarmSoundModel> saveSound() async {
+    final sound = getSelectedAlarmSound();
+    await setAlarmSoundService.excute(sound);
+    Get.back();
+    return sound;
   }
 
   Future<void> selectAlarmSound(int index) async {
-    if (index == selectedSound.value) return;
+    if (selectedSound.value == alarmSounds.length - 1) {
+      alarmSounds[alarmSounds.length - 1] = noCustomSound;
+    }
+
+    if (index == selectedSound.value) {
+      return playCurrentSound();
+    }
 
     musicPlaying.value = true;
     selectedSound.value = index;
-    customSound.value = null; // Reset custom sound when selecting from list
+    await playCurrentSound();
+  }
 
-    // Stop any existing audio before playing a new one
+  Future stopExistingAudio() async {
+    musicPlaying.value = false;
     await audioInstance.stop();
-    await audioInstance.play(AssetSource(AppSounds.tick));
   }
 
-  AlarmSoundEntity getSelectedAlarmSound() {
-    return customSound.value ?? alarmSounds[selectedSound.value];
+  Future playCurrentSound() async {
+    stopExistingAudio();
+    musicPlaying.value = true;
+    AlarmSoundModel sound = alarmSounds[selectedSound.value];
+    final soundSource = sound.isCustomSound
+        ? DeviceFileSource(sound.path)
+        : AssetSource(sound.path);
+    await audioInstance.play(soundSource);
   }
+
+  AlarmSoundModel getSelectedAlarmSound() => alarmSounds[selectedSound.value];
 
   Future<void> selectCustomSound() async {
+    stopExistingAudio();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.audio, // Only allow audio files
     );
 
     if (result != null && result.files.single.path != null) {
-      setSelectCustomSound(AlarmSoundEntity(
-        name: result.files.single.name,
+      final sound = AlarmSoundModel(
+        source: AlarmSoundSource.custom,
+        name: p.basenameWithoutExtension(
+            result.files.single.name), // Remove extension
         path: result.files.single.path!,
-      ));
+      );
+      setAlarmSoundService.excute(sound);
+      final lastItem = alarmSounds.length - 1;
+      selectedSound.value = lastItem;
+      alarmSounds[lastItem] = sound;
     }
   }
 
-  void setSelectCustomSound(AlarmSoundEntity sound) {
-    customSound.value = sound;
-    selectedSound.value = -1; // Indicates custom sound selection
+  initialAlarmSound() {
+    final sound = Settings.alarmSound;
+    if (sound.isCustomSound) alarmSounds[alarmSounds.length - 1] = sound;
+    final index = alarmSounds.indexWhere((item) => item.name == sound.name);
+    selectedSound = RxInt(index);
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    alarmSounds = [...List.from(alarmSoundsData), noCustomSound];
+    initialAlarmSound();
+    setAlarmSoundService = SetAlarmSoundService();
+    audioInstance.onPlayerComplete.listen((event) {
+      musicPlaying.value = false;
+    });
+  }
+
+  @override
+  void onClose() {
+    stopExistingAudio();
+    super.onClose();
   }
 }

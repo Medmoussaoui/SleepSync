@@ -5,6 +5,7 @@ import 'package:sleepcyclesapp/view/screens/begin_cycles_screen.dart';
 import 'package:sleepcyclesapp/view/screens/home_screen.dart';
 import 'package:sleepcyclesapp/view/screens/onboarding_screen.dart';
 import 'package:sleepcyclesapp/view/screens/settings_screen.dart';
+import 'package:sleepcyclesapp/view/screens/sleep_tracker_screen.dart';
 import 'package:sleepcyclesapp/view/screens/welcome_screen.dart';
 
 List<GetPage<dynamic>>? pages = [
@@ -31,6 +32,11 @@ List<GetPage<dynamic>>? pages = [
   GetPage(
     name: AppRoutes.beginCyclesScreen,
     page: () => const BeginCyclesScreen(),
+    transition: Transition.cupertino,
+  ),
+  GetPage(
+    name: AppRoutes.sleepTrackerScreen,
+    page: () => const SleepTrackerScreen(),
     transition: Transition.cupertino,
   ),
 ];

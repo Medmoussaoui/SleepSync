@@ -3,8 +3,11 @@ import 'package:sleepcyclesapp/utils/functions/is_night_time.dart';
 import 'package:sleepcyclesapp/utils/images.dart';
 
 class BackgroundImageTimeState extends StatelessWidget {
+  final String? screenImage;
+
   const BackgroundImageTimeState({
     super.key,
+    this.screenImage,
   });
 
   @override
@@ -13,7 +16,10 @@ class BackgroundImageTimeState extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
-            isNightTime() ? AppImages.nightScreen : AppImages.morningScreen,
+            screenImage ??
+                (isNightTime()
+                    ? AppImages.nightScreen
+                    : AppImages.morningScreen),
           ),
           fit: BoxFit.cover,
         ),
