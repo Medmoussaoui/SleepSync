@@ -1,25 +1,25 @@
 import 'dart:async';
-import 'package:sensors_plus/sensors_plus.dart';
+import 'package:sleepcyclesapp/components/CustomTouchScreenLisener/controller.dart';
 
 class MotionDetector {
+
   Future<bool> detectScreenTouch() async {
     Completer<bool> touchDetected = Completer();
-    GyroscopeEvent? lastGyroEvent;
 
-    final subscription = gyroscopeEventStream().listen((GyroscopeEvent event) {
-      if (!touchDetected.isCompleted) {
-        if (lastGyroEvent != null &&
-            ((event.x - lastGyroEvent!.x).abs() > 0.1 ||
-                (event.y - lastGyroEvent!.y).abs() > 0.1)) {
-          touchDetected.complete(true);
-        }
+    StreamSubscription? subscription;
+
+    subscription = TouchScreenLisener.screenEvent.listen((value) {
+      print("Touch event : ${value == ScreenTouchEvents.tap}");
+      if (value == ScreenTouchEvents.tap) {
+        touchDetected.complete(value == ScreenTouchEvents.tap);
+        subscription?.cancel();
       }
-      lastGyroEvent = event;
     });
 
-    return touchDetected.future.timeout(Duration(seconds: 15), onTimeout: () {
-      subscription.cancel();
+    return touchDetected.future.timeout(Duration(seconds: 10), onTimeout: () {
+      subscription?.cancel();
       return false;
     });
   }
+
 }

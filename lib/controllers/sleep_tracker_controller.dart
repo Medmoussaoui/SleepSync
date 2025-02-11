@@ -13,18 +13,27 @@ class SleepTrackerScreenController extends GetxController {
   Timer? sleepTimer; // Store periodic timer
 
   void startTrackingSleep() {
-    trackerService.startTracking();
     trackerService.isSleeping.listen((sleep) {
       if (sleep) _userSleep();
     });
+    trackerService.startTracking();
   }
 
   void _userSleep() {
     print("--------> User Sleep");
+    print(
+        "-----------> Track Service Sleep Start ${trackerService.sleepStartTime}");
     sleepCycleModel.startTime = trackerService.sleepStartTime;
     // Update UI every minute while sleeping
     sleepTimer?.cancel();
-    sleepTimer = Timer.periodic(Duration(minutes: 1), (_) => update());
+    sleepTimer = Timer.periodic(Duration(minutes: 1), (_) {
+      print("----> Timer.periodic callbak run");
+      print("----> Progress : ${sleepCycleModel.progress}");
+      print("----> Cycles : ${sleepCycleModel.cycles}");
+      print("----> completed cycles : ${sleepCycleModel.completedCycles}");
+      print("----> Start Time : ${sleepCycleModel.startTime}");
+      update();
+    });
   }
 
   void _userAwake() {
@@ -33,7 +42,10 @@ class SleepTrackerScreenController extends GetxController {
 
   @override
   void onInit() {
-    sleepCycleModel = SleepCycleModel(cycles: 5, date: DateTime.now());
+    sleepCycleModel = SleepCycleModel(
+      cycles: Get.arguments["cycles"],
+      date: DateTime.now(),
+    );
     trackerService = SleepTrackerService(
       responseDetector: ResponseDetector(
         motionDetector: MotionDetector(),
@@ -48,6 +60,7 @@ class SleepTrackerScreenController extends GetxController {
   @override
   void onClose() {
     sleepTimer?.cancel(); // Clean up when the controller is destroyed
+    trackerService.destroy();
     super.onClose();
   }
 }

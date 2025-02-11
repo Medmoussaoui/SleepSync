@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sleepcyclesapp/components/current_time_widget.dart';
 import 'package:sleepcyclesapp/components/custom_icon.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
-import 'package:sleepcyclesapp/utils/functions/get_formated_time.dart';
 import 'package:sleepcyclesapp/utils/functions/is_night_time.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 import 'package:sleepcyclesapp/utils/symbols.dart';
@@ -27,11 +27,11 @@ class SayGoodMorningOrNightWithTime extends StatelessWidget {
               style: AppTextStyles.headline2medium,
             ),
             SizedBox(height: 2),
-            Text(
-              getFormattedTime(),
+            CurrentTimeWidget(
               style: AppTextStyles.subtitle3Light.copyWith(
                 color: AppColors.white,
               ),
+              includeDayName: true,
             ),
           ],
         ),
@@ -43,7 +43,7 @@ class SayGoodMorningOrNightWithTime extends StatelessWidget {
           },
           icon: CustomIcon(
             icon: AppIcons.settings,
-          size: 24,
+            size: 24,
           ),
         )
       ],

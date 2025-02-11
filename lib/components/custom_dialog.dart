@@ -73,11 +73,11 @@ class CustomDialog extends StatelessWidget {
             ),
           ),
         ).animate().moveY(
-              begin: 70,
+              begin: 50,
               end: 0,
-              duration: 1000.ms,
-              curve: Curves.elasticOut,
-            ),
+              duration: 400.ms,
+              curve: Curves.easeOut,
+            ).fade(delay: 100.ms),
       ],
     );
   }

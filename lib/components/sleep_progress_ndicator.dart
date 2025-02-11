@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:math';
 import 'package:sleepcyclesapp/utils/colors.dart';
 import 'package:sleepcyclesapp/utils/text_styles.dart';
@@ -46,18 +47,28 @@ class SemiCircularProgressBarState extends State<SemiCircularProgressBar> {
                     "cycles",
                     style: AppTextStyles.subtitle4Regular.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.secondaryTextColor.withOpacity(0.5),
+                      // color: AppColors.secondaryTextColor.withOpacity(0.5),
+                      color: AppColors.relaxGrey.withOpacity(0.5),
                     ),
                   ),
-                  Text(
-                    "${(animatedProgress * 100).round()}%",
-                    style: AppTextStyles.headline2bold.copyWith(fontSize: 40),
+                  AnimatedSwitcher(
+                    duration: 450.ms,
+                    transitionBuilder: (child, animation) =>
+                        FadeTransition(opacity: animation, child: child),
+                    child: Text(
+                      "${(animatedProgress * 100).round()}%",
+                      style: AppTextStyles.headline2bold.copyWith(
+                        fontSize: 40,
+                      color: AppColors.relaxWhite,
+                      ),
+                    ),
                   ),
                   Text(
                     "Completed (${widget.completedCycles}/${widget.totalCycles})",
                     style: AppTextStyles.subtitle2Regular.copyWith(
                       fontSize: 14,
-                      color: AppColors.secondaryTextColor.withOpacity(0.8),
+                      // color: AppColors.secondaryTextColor.withOpacity(0.8),
+                      color: AppColors.relaxGrey.withOpacity(0.8),
                     ),
                   ),
                 ],
@@ -78,13 +89,13 @@ class _SemiCirclePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint backgroundPaint = Paint()
-      ..color = AppColors.white.withOpacity(0.05)
+      ..color = AppColors.relaxWhite.withOpacity(0.1)
       ..strokeWidth = 17
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
     final Paint progressPaint = Paint()
-      ..color = AppColors.blue
+      ..color = AppColors.relaxBlue
       ..strokeWidth = 17
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;

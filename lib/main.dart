@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fullscreen_window/fullscreen_window.dart';
 import 'package:get/get.dart';
+import 'package:sleepcyclesapp/components/CustomTouchScreenLisener/widget.dart';
 import 'package:sleepcyclesapp/routes.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
 import 'package:sleepcyclesapp/utils/hive_database.dart';
@@ -21,15 +22,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.onBoardingScreen,
-      getPages: pages,
-      theme: ThemeData(
-        applyElevationOverlayColor: false, // Prevents dark mode color filtering
-        appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(color: AppColors.white),
+    return CustomTouchScreenLisener(
+      child: GetMaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppRoutes.onBoardingScreen,
+        getPages: pages,
+        theme: ThemeData(
+          applyElevationOverlayColor:
+              false, // Prevents dark mode color filtering
+          appBarTheme: AppBarTheme(
+            iconTheme: IconThemeData(color: AppColors.white),
+          ),
         ),
       ),
     );

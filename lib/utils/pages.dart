@@ -5,6 +5,8 @@ class AppRoutes {
   static final String homeScreen = "/homeScreen";
   static final String beginCyclesScreen = "/beginCyclesScreen";
   static final String sleepTrackerScreen = "/sleepTrackerScreen";
+  static final String wakeUpScreen = "/wakeUpScreen";
+  static final String introSleepScreen = "/introSleepScreen";
   
-  
+
 }

@@ -35,29 +35,38 @@ class SleepTrackerService {
         await vibrationNotifier.sendVibration();
         bool responded = await responseDetector.waitForResponse();
         if (responded) {
-          print("-----------> User not sleep yet (trys: $trys)");
-          trys++;
-          continue;
+          print("-----------> User not sleep");
+          checkInterval = 1; // Reduce interval for next checks
+          return _scheduleCheck();
         } else {
-          print("-----------> User sleep ");
-          _detectSleep();
-          break;
+          if (trys == 3) {
+            return _detectSleep();
+          }
+          print("-----------> User Not Responde trys ($trys) ");
+          trys++;
         }
       }
-      checkInterval = 2; // Reduce interval for next checks
-      _scheduleCheck();
     });
   }
 
   void _detectSleep() {
-    isSleeping.value = true;
+    print("-----------> User sleep ");
     sleepStartTime = DateTime.now();
+    print("-----------> _detectSleep() -> sleepStartTime = $sleepStartTime ");
     checkTimer?.cancel();
+    isSleeping.value = true;
   }
 
   void stopTracking() {
     isSleeping.value = false;
     isTracking.value = false;
     checkTimer?.cancel();
+  }
+
+  destroy() {
+    stopTracking();
+    isSleeping.close();
+    isTracking.close();
+    print("SleepTrackerService disposed.");
   }
 }

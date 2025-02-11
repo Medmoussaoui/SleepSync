@@ -3,9 +3,11 @@ import 'package:sleepcyclesapp/middlewares/onboarding_middleware.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 import 'package:sleepcyclesapp/view/screens/begin_cycles_screen.dart';
 import 'package:sleepcyclesapp/view/screens/home_screen.dart';
+import 'package:sleepcyclesapp/view/screens/intro_sleep_screen.dart';
 import 'package:sleepcyclesapp/view/screens/onboarding_screen.dart';
 import 'package:sleepcyclesapp/view/screens/settings_screen.dart';
 import 'package:sleepcyclesapp/view/screens/sleep_tracker_screen.dart';
+import 'package:sleepcyclesapp/view/screens/wake_up_screen.dart';
 import 'package:sleepcyclesapp/view/screens/welcome_screen.dart';
 
 List<GetPage<dynamic>>? pages = [
@@ -37,6 +39,16 @@ List<GetPage<dynamic>>? pages = [
   GetPage(
     name: AppRoutes.sleepTrackerScreen,
     page: () => const SleepTrackerScreen(),
+    transition: Transition.fade,
+  ),
+  GetPage(
+    name: AppRoutes.wakeUpScreen,
+    page: () => const WakeUpScreen(),
     transition: Transition.cupertino,
+  ),
+  GetPage(
+    name: AppRoutes.introSleepScreen,
+    page: () => const IntroSleepScreen(),
+    transition: Transition.fade,
   ),
 ];
