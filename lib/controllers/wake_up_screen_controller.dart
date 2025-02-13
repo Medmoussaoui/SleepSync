@@ -18,15 +18,16 @@ class WakeUpScreenController extends GetxController {
     player.play(soundSource);
   }
 
-  void snoozeFor10Min() {
+  void snoozeFor10Min() async {
     player.stop();
-    WakelockPlus.enable();
+    WakelockPlus.disable();
     final thenMunite = DateTime.now().add(Duration(minutes: 10));
-    AlarmScheduleService.scheduleService(thenMunite);
-    Get.back();
+    await AlarmScheduleService.scheduleService(thenMunite);
+    // Get.back();
+    exit(0);
   }
 
-  void wakeUp() {
+  wakeUp() async {
     player.stop();
     WakelockPlus.disable();
     // save sleep info cyles session
@@ -35,18 +36,16 @@ class WakeUpScreenController extends GetxController {
 
     if (model != null) {
       model.endTime = DateTime.now();
-      AddSleepCycleService().addSleepCycle(model);
+      await AddSleepCycleService().addSleepCycle(model);
     }
-
-    Get.back();
     exit(0);
   }
 
   @override
   void onInit() {
+    WakelockPlus.enable();
     player = AudioPlayer();
     playSound();
-    WakelockPlus.enable();
     super.onInit();
   }
 
