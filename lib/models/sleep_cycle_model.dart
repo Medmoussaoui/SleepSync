@@ -17,13 +17,14 @@ class SleepCycleModel {
     this.state = "active",
   });
 
+  get cyclesDuration => Duration(minutes: (Settings.cycleMinute * cycles));
+
   /// Calculate wakeup latency (difference between expected and actual wake-up time)
   Duration get wakeupLatency {
     if (state == "active" || startTime == null || endTime == null) {
       return Duration.zero;
     }
 
-    final cyclesDuration = Duration(minutes: (Settings.cycleMinute * cycles));
     final expectedWakeupTime = startTime!.add(cyclesDuration);
 
     return endTime!.difference(expectedWakeupTime);

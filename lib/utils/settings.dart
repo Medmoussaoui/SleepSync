@@ -1,6 +1,6 @@
-import 'package:hive/hive.dart';
 import 'package:sleepcyclesapp/Data/alarm_sounds_data.dart';
 import 'package:sleepcyclesapp/models/alarm_sound_model.dart';
+import 'package:sleepcyclesapp/models/sleep_cycle_model.dart';
 import 'package:sleepcyclesapp/utils/hive_database.dart';
 
 class Settings {
@@ -18,5 +18,16 @@ class Settings {
 
   static bool get noiseTracking {
     return HiveDatabase.db.get("noiseTracking") ?? true;
+  }
+
+  static SleepCycleModel? get currentSleepSession {
+    final result = HiveDatabase.db.get("currentSleepSession");
+    if (result == null) return null;
+    final model = SleepCycleModel.fromMap(result);
+    if (model.endTime != null || model.state == "end") {
+      HiveDatabase.db.delete("currentSleepSession");
+      return null;
+    }
+    return model;
   }
 }

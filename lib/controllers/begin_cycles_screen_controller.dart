@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
 import 'package:sleepcyclesapp/services/enable_desible_noise_tracking.dart';
+import 'package:sleepcyclesapp/utils/pages.dart';
 import 'package:sleepcyclesapp/utils/settings.dart';
+import 'package:vibration/vibration.dart';
+import 'package:vibration/vibration_presets.dart';
 
 class BeginCyclesScreenController extends GetxController {
   int cycles = 1;
@@ -9,6 +12,14 @@ class BeginCyclesScreenController extends GetxController {
 
   late bool noiseTracking;
   late String alarmSoundName;
+
+  startSleep() async {
+    Vibration.vibrate(preset: VibrationPreset.rapidTapFeedback);
+    Get.offAllNamed(
+      AppRoutes.introSleepScreen,
+      arguments: {"cycles": cycles},
+    );
+  }
 
   enableDisableNoiseTracking(bool active) {
     noiseTracking = active;

@@ -13,6 +13,10 @@ void main() async {
   AppAudioPlayer.initial();
   FullScreenWindow.setFullScreen(true); // enter fullscreen
   await HiveDatabase.initial();
+  // await AndroidAlarmManager.initialize(); // Initialize AlarmManager
+  // FlutterForegroundTask.initCommunicationPort();
+  // initServiceForeground();
+
   runApp(const MyApp());
 }
 

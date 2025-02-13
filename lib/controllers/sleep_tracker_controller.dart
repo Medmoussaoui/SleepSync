@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:sleepcyclesapp/channels/alarm_schedule_service.dart';
 import 'package:sleepcyclesapp/models/sleep_cycle_model.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/motion_detector.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/response_detector.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/service.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/sound_detector.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/vibration_notifier.dart';
+import 'package:sleepcyclesapp/utils/hive_database.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class SleepTrackerScreenController extends GetxController {
   late SleepCycleModel sleepCycleModel;
@@ -13,6 +16,7 @@ class SleepTrackerScreenController extends GetxController {
   Timer? sleepTimer; // Store periodic timer
 
   void startTrackingSleep() {
+    WakelockPlus.enable();
     trackerService.isSleeping.listen((sleep) {
       if (sleep) _userSleep();
     });
@@ -20,18 +24,19 @@ class SleepTrackerScreenController extends GetxController {
   }
 
   void _userSleep() {
-    print("--------> User Sleep");
-    print(
-        "-----------> Track Service Sleep Start ${trackerService.sleepStartTime}");
+    print("--------------------------------> USER SLEEP NOW");
+    WakelockPlus.disable();
     sleepCycleModel.startTime = trackerService.sleepStartTime;
+    HiveDatabase.db.put("currentSleepSession", sleepCycleModel.toMap());
+    // for test only this now
+    final alarmWakeUpTime = trackerService.sleepStartTime!.add(Duration(minutes: 1));
+    // final alarmWakeUpTime = trackerService.sleepStartTime!.add(sleepCycleModel.cyclesDuration);
+  
+    AlarmScheduleService.scheduleService(alarmWakeUpTime);
+
     // Update UI every minute while sleeping
     sleepTimer?.cancel();
     sleepTimer = Timer.periodic(Duration(minutes: 1), (_) {
-      print("----> Timer.periodic callbak run");
-      print("----> Progress : ${sleepCycleModel.progress}");
-      print("----> Cycles : ${sleepCycleModel.cycles}");
-      print("----> completed cycles : ${sleepCycleModel.completedCycles}");
-      print("----> Start Time : ${sleepCycleModel.startTime}");
       update();
     });
   }
@@ -40,12 +45,16 @@ class SleepTrackerScreenController extends GetxController {
     sleepTimer?.cancel(); // Stop the periodic updates when the user wakes up
   }
 
+  SleepCycleModel setSleepSession() {
+    final model =
+        SleepCycleModel(cycles: Get.arguments["cycles"], date: DateTime.now());
+    HiveDatabase.db.put("currentSleepSession", model.toMap());
+    return model;
+  }
+
   @override
   void onInit() {
-    sleepCycleModel = SleepCycleModel(
-      cycles: Get.arguments["cycles"],
-      date: DateTime.now(),
-    );
+    sleepCycleModel = setSleepSession();
     trackerService = SleepTrackerService(
       responseDetector: ResponseDetector(
         motionDetector: MotionDetector(),

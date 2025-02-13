@@ -52,7 +52,7 @@ class _SwipeUpWidget extends StatefulWidget {
 }
 
 class _SwipeUpWidgetState extends State<_SwipeUpWidget> {
-  double swipeSize = 0.0;
+  double swipeSize = -5;
   final double sensitivity = 1.0;
   final double triggerThreshold =
       150.0; // Distance needed to trigger swipe action
@@ -85,7 +85,7 @@ class _SwipeUpWidgetState extends State<_SwipeUpWidget> {
         duration: 300.ms,
         builder: (_, value, child) {
           return Transform.translate(
-            offset: Offset(0.0, -value),
+            offset: Offset(0.0,  (-value > -5 ? -5 : -value) ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -108,7 +108,7 @@ class _SwipeUpWidgetState extends State<_SwipeUpWidget> {
                     )
                   ],
                 ),
-                swipeSize > 0
+                swipeSize < -5
                     ? Icon(Icons.arrow_back)
                     : Lottie.asset(
                         'assets/animations/swipeup.json', // Replace with your actual path
