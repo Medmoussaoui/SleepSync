@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sleepcyclesapp/Data/index.dart';
 import 'package:sleepcyclesapp/controllers/onboarding_controller.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
+import 'package:sleepcyclesapp/utils/functions/request_overlay_permission.dart';
 import 'package:sleepcyclesapp/view/widgets/onBoarding/onboarding_content.dart';
 import 'package:sleepcyclesapp/view/widgets/onBoarding/onboarding_progress.dart';
 
@@ -17,15 +18,8 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF233050), // Match your background color
-      statusBarIconBrightness: Brightness.light, // Light icons for contrast
-      systemNavigationBarColor:
-          Color(0xFF233050), // Match bottom bar with background
-      systemNavigationBarIconBrightness:
-          Brightness.light, // Light icons for contrast
-    ));
     super.initState();
+    requestOverlayPermission();
   }
 
   @override

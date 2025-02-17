@@ -25,11 +25,11 @@ class IntroSleepScreen extends StatelessWidget {
                 repeatForever: false,
                 isRepeatingAnimation: false,
                 onNextBeforePause: (index, state) async {
-                  if (index == 1) {
+                  if (index == 2) {
                     await Future.delayed(120.ms);
                     Get.offAllNamed(
                       AppRoutes.sleepTrackerScreen,
-                      arguments: {"cycles": Get.arguments["cycles"]},
+                      arguments: {"session": Get.arguments["session"]},
                     );
                   }
                 },
@@ -38,18 +38,28 @@ class IntroSleepScreen extends StatelessWidget {
                     curve: Curves.easeIn,
                     // "Drift into rest",
                     "Let go",
-                    speed: 200.ms,
+                    speed: 170.ms,
                     textStyle: AppTextStyles.headline2bold.copyWith(
-                      color: AppColors.relaxWhite,
+                      color: AppColors.relaxWhite.withOpacity(0.8),
                       fontSize: 35,
                     ),
                   ),
                   RotateAnimatedText(
-                    "we’re here to track",
+                    "It's time to wind down",
+                    duration: 2000.ms,
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w200,
                       color: AppColors.relaxGrey,
-                      fontSize: 25,
+                      fontSize: 22,
+                    ),
+                  ),
+                  RotateAnimatedText(
+                    "close your eyes and relax",
+                    duration: 2000.ms,
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      color: AppColors.relaxGrey,
+                      fontSize: 22,
                     ),
                   ),
                 ],

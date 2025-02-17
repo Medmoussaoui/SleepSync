@@ -41,8 +41,8 @@ class PrimaryButton extends StatelessWidget {
           ),
           child: Text(
             text,
-            style: GoogleFonts.inter(
-              fontSize: 15,
+            style: GoogleFonts.poppins(
+              fontSize: 15.5,
               color: AppColors.primaryTextColor,
               fontWeight: FontWeight.w600,
             ),

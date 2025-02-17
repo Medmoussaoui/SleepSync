@@ -23,9 +23,11 @@ class BeginSleepCylesSetting extends GetView<BeginCyclesScreenController> {
           id: "alarmSound",
           builder: (con) {
             return CustomTile(
+              key: ValueKey("alarmSound"),
               padding: false,
               title: "Wake-Up Alarm Sound",
-              subtitle:  truncateWithEllipsis(controller.alarmSoundName,maxLength: 24) ,
+              subtitle: truncateWithEllipsis(controller.alarmSoundName,
+                  maxLength: 24),
               leadingIcon: CustomIcon(
                 icon: AppIcons.music,
                 background: true,
@@ -46,6 +48,7 @@ class BeginSleepCylesSetting extends GetView<BeginCyclesScreenController> {
           id: "noiseTracking",
           builder: (con) {
             return CustomTile(
+              key: ValueKey("noiseTracking"),
               padding: false,
               title: "Noise Tracking",
               subtitle: "Detects ambient noise during sleep",

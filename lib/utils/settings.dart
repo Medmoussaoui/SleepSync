@@ -13,7 +13,7 @@ class Settings {
   static AlarmSoundModel get alarmSound {
     final sound = HiveDatabase.db.get("alarmSound");
     if (sound != null) return AlarmSoundModel.fromJson(sound);
-    return alarmSoundsData.first;
+    return defaultAlarmSounds.first;
   }
 
   static bool get noiseTracking {

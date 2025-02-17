@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sleepcyclesapp/utils/colors.dart';
 import 'package:sleepcyclesapp/utils/text_styles.dart';
 
 class SleepInformation extends StatelessWidget {
@@ -14,7 +15,9 @@ class SleepInformation extends StatelessWidget {
       children: [
         Text(
           "Sleep Information",
-          style: AppTextStyles.headline3regular,
+          style: AppTextStyles.headline3regular.copyWith(
+            color: AppColors.white.withOpacity(0.8),
+          ),
         ),
         SizedBox(width: 5.0),
         Text(

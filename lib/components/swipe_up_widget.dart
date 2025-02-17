@@ -53,25 +53,29 @@ class _SwipeUpWidget extends StatefulWidget {
 
 class _SwipeUpWidgetState extends State<_SwipeUpWidget> {
   double swipeSize = -5;
-  final double sensitivity = 1.0;
+  final double sensitivity = 0.5;
   final double triggerThreshold =
-      150.0; // Distance needed to trigger swipe action
+      1000.0; // Distance needed to trigger swipe action
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
     setState(() {
-      swipeSize += details.primaryDelta!.abs() * sensitivity;
-      print("--------> Size = $swipeSize");
-      swipeSize =
-          swipeSize.clamp(0.0, triggerThreshold); // Prevent over-dragging
+      double moveSize = details.primaryDelta! * sensitivity;
+
+      swipeSize = moveSize.isNegative
+          ? swipeSize + moveSize
+          : -(swipeSize.abs() - moveSize);
+      // swipeSize = swipeSize.clamp(0, -triggerThreshold); // Prevent over-dragging
+      // Prevent over-dragging
+      swipeSize = swipeSize.clamp(-200, -5);
     });
   }
 
   void _onVerticalDragEnd(DragEndDetails details) {
-    if (swipeSize >= triggerThreshold) {
+    if (swipeSize <= -200) {
       widget.onSwipe(); // Trigger the swipe action
     }
     setState(() {
-      swipeSize = 0.0; // Reset position
+      swipeSize = -5; // Reset position
     });
   }
 
@@ -81,11 +85,11 @@ class _SwipeUpWidgetState extends State<_SwipeUpWidget> {
       onVerticalDragUpdate: _onVerticalDragUpdate,
       onVerticalDragEnd: _onVerticalDragEnd,
       child: TweenAnimationBuilder(
-        tween: Tween<double>(begin: 0, end: swipeSize),
-        duration: 300.ms,
+        tween: Tween<double>(begin: -5, end: swipeSize),
+        duration: 225.ms,
         builder: (_, value, child) {
           return Transform.translate(
-            offset: Offset(0.0,  (-value > -5 ? -5 : -value) ),
+            offset: Offset(0.0, value),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -108,12 +112,10 @@ class _SwipeUpWidgetState extends State<_SwipeUpWidget> {
                     )
                   ],
                 ),
-                swipeSize < -5
-                    ? Icon(Icons.arrow_back)
-                    : Lottie.asset(
-                        'assets/animations/swipeup.json', // Replace with your actual path
-                        height: 90,
-                      ),
+                Lottie.asset(
+                  'assets/animations/swipeup.json', // Replace with your actual path
+                  height: 90,
+                ),
               ],
             ),
           );

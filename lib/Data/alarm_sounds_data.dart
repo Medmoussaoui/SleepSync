@@ -1,7 +1,7 @@
 import 'package:sleepcyclesapp/models/alarm_sound_model.dart';
 import 'package:sleepcyclesapp/utils/sounds.dart';
 
-final List<AlarmSoundModel> alarmSoundsData = [
+final List<AlarmSoundModel> defaultAlarmSounds = [
   AlarmSoundModel(
     source: AlarmSoundSource.app,
     name: "Morning Joy",

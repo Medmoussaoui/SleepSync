@@ -34,7 +34,7 @@ List<GetPage<dynamic>>? pages = [
   GetPage(
     name: AppRoutes.beginCyclesScreen,
     page: () => const BeginCyclesScreen(),
-    transition: Transition.cupertino,
+    transition: Transition.downToUp,
   ),
   GetPage(
     name: AppRoutes.sleepTrackerScreen,

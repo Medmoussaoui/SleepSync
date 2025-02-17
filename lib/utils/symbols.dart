@@ -19,4 +19,5 @@ class AppIcons {
   static String settings = "$root/settings.png";
   static String arrowback = "$root/arrowback.png";
   static String swipeup = "$root/swipeup.png";
+  static String notification = "$root/notification.png";
 }

@@ -17,7 +17,7 @@ class ResponseDetector implements IResponseDetector {
     Completer<bool> responseDetected = Completer();
 
     // Timeout mechanism
-    Timer(Duration(seconds: 10), () {
+    Timer(Duration(seconds: 8), () {
       if (!responseDetected.isCompleted) responseDetected.complete(false);
     });
 

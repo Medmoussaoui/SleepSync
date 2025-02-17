@@ -7,100 +7,86 @@ import 'package:sleepcyclesapp/services/set_custom_alarm_sound.dart';
 import 'package:sleepcyclesapp/utils/settings.dart';
 import 'package:path/path.dart' as p;
 
-final noCustomSound = AlarmSoundModel(
-  source: AlarmSoundSource.none,
-  path: "",
-  name: "Chose from this device",
-);
-
 class SelectAlarmSoundController extends GetxController {
   late final SetAlarmSoundService setAlarmSoundService;
 
-  final AudioPlayer audioInstance = AudioPlayer();
-  late final RxInt selectedSound;
+  final List<AlarmSoundModel> alarmSounds = defaultAlarmSounds;
   final RxBool musicPlaying = false.obs;
+  final AudioPlayer audioInstance = AudioPlayer();
+  final RxInt selectedSound = RxInt(-1);
 
-  late final List<AlarmSoundModel> alarmSounds;
+  AlarmSoundModel? customSound;
+
+  AlarmSoundModel getSelectedAlarmSound() {
+    if (customSound != null) return customSound!;
+    return alarmSounds[selectedSound.value];
+  }
 
   Future<AlarmSoundModel> saveSound() async {
     final sound = getSelectedAlarmSound();
     await setAlarmSoundService.excute(sound);
-    Get.back();
     return sound;
   }
 
-  Future<void> selectAlarmSound(int index) async {
-    if (selectedSound.value == alarmSounds.length - 1) {
-      alarmSounds[alarmSounds.length - 1] = noCustomSound;
-    }
-
-    if (index == selectedSound.value) {
-      return playCurrentSound();
-    }
-
-    musicPlaying.value = true;
+  Future<void> selectFromDefault(int index) async {
+    if (index == selectedSound.value) return;
     selectedSound.value = index;
-    await playCurrentSound();
-  }
-
-  Future stopExistingAudio() async {
-    musicPlaying.value = false;
-    await audioInstance.stop();
-  }
-
-  Future playCurrentSound() async {
-    stopExistingAudio();
-    musicPlaying.value = true;
+    customSound = null;
     AlarmSoundModel sound = alarmSounds[selectedSound.value];
-    final soundSource = sound.isCustomSound
-        ? DeviceFileSource(sound.path)
-        : AssetSource(sound.path);
-    await audioInstance.play(soundSource);
+    playSound(sound);
   }
 
-  AlarmSoundModel getSelectedAlarmSound() => alarmSounds[selectedSound.value];
+  Future playSound(AlarmSoundModel sound) async {
+    audioInstance.stop();
+    await audioInstance.play(_soundSource(sound));
+  }
 
-  Future<void> selectCustomSound() async {
-    stopExistingAudio();
+  Source _soundSource(AlarmSoundModel sound) {
+    if (sound.isCustomSound) return DeviceFileSource(sound.path);
+    return AssetSource(sound.path);
+  }
+
+  Future<void> selectFromDevice() async {
+    audioInstance.stop();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.audio, // Only allow audio files
     );
 
     if (result != null && result.files.single.path != null) {
-      final sound = AlarmSoundModel(
+      customSound = AlarmSoundModel(
         source: AlarmSoundSource.custom,
         name: p.basenameWithoutExtension(
             result.files.single.name), // Remove extension
         path: result.files.single.path!,
       );
-      setAlarmSoundService.excute(sound);
-      final lastItem = alarmSounds.length - 1;
-      selectedSound.value = lastItem;
-      alarmSounds[lastItem] = sound;
+      selectedSound.value = -1;
     }
   }
 
   initialAlarmSound() {
     final sound = Settings.alarmSound;
-    if (sound.isCustomSound) alarmSounds[alarmSounds.length - 1] = sound;
-    final index = alarmSounds.indexWhere((item) => item.name == sound.name);
-    selectedSound = RxInt(index);
+    if (sound.isCustomSound) {
+      customSound = sound;
+    } else {
+      selectedSound.value =
+          alarmSounds.indexWhere((item) => item.name == sound.name);
+    }
   }
 
   @override
   void onInit() {
     super.onInit();
-    alarmSounds = [...List.from(alarmSoundsData), noCustomSound];
     initialAlarmSound();
     setAlarmSoundService = SetAlarmSoundService();
-    audioInstance.onPlayerComplete.listen((event) {
-      musicPlaying.value = false;
+
+    audioInstance.onPlayerStateChanged.listen((event) {
+      musicPlaying.value = event == PlayerState.playing;
     });
   }
 
   @override
   void onClose() {
-    stopExistingAudio();
+    audioInstance.stop();
     super.onClose();
   }
 }

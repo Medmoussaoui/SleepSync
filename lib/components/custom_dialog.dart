@@ -29,7 +29,7 @@ class CustomDialog extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 1.7, sigmaY: 1.7), // Blur effect
             child: Container(
-              color: AppColors.backgroundColor.withOpacity(0.8),
+              color: Colors.black.withOpacity(0.4),
             ), // Background overlay
           ),
         ),
@@ -40,11 +40,11 @@ class CustomDialog extends StatelessWidget {
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(15),
             child: Container(
-              margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
+              margin: EdgeInsets.only(left: 15, right: 15, bottom: 13),
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
               width: double.infinity,
               decoration: BoxDecoration(
-               color: AppColors.black,
+                color: AppColors.black,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -72,12 +72,15 @@ class CustomDialog extends StatelessWidget {
               ),
             ),
           ),
-        ).animate().moveY(
-              begin: 50,
+        )
+            .animate()
+            .moveY(
+              begin: 150,
               end: 0,
-              duration: 400.ms,
-              curve: Curves.easeOut,
-            ).fade(delay: 100.ms),
+              duration: 650.ms,
+              curve: Curves.fastEaseInToSlowEaseOut,
+            )
+            .fade(duration: 450.ms)
       ],
     );
   }

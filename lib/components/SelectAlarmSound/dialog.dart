@@ -24,46 +24,51 @@ class SelectAlarmSound extends StatelessWidget {
       title: "Alarm Sounds",
       content: Material(
         color: Colors.transparent,
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemCount: controller.alarmSounds.length,
-          separatorBuilder: (_, index) => SizedBox(height: 10),
-          itemBuilder: (_, index) {
-            if (index == controller.alarmSounds.length - 1) {
-              // controller.selectCustomSound();
-              return GetX<SelectAlarmSoundController>(
-                builder: (con) {
-                  bool isSelected = controller.selectedSound.value == index;
-                  return CustomSoundWidget(
-                    isPlaying: isSelected && controller.musicPlaying.value,
-                    musicName: controller.alarmSounds[index].name,
-                    onTap: () {
-                      controller.selectCustomSound();
-                    },
-                  );
-                },
-              );
-            }
-            return GetX<SelectAlarmSoundController>(
-              builder: (con) {
-                bool isSelected = controller.selectedSound.value == index;
-                return MusicListTile(
-                  id: index,
-                  isPlaying: controller.musicPlaying.value && isSelected,
-                  musicName: controller.alarmSounds[index].name,
-                  isSelected: isSelected,
-                  onTap: (index) => controller.selectAlarmSound(index),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListView.separated(
+              shrinkWrap: true,
+              itemCount: controller.alarmSounds.length,
+              separatorBuilder: (_, index) => SizedBox(height: 10),
+              itemBuilder: (_, index) {
+                return GetX<SelectAlarmSoundController>(
+                  builder: (con) {
+                    bool isSelected = controller.selectedSound.value == index;
+                    return MusicListTile(
+                      id: index,
+                      isPlaying: controller.musicPlaying.value && isSelected,
+                      musicName: controller.alarmSounds[index].name,
+                      isSelected: isSelected,
+                      onTap: (index) => controller.selectFromDefault(index),
+                    );
+                  },
                 );
               },
-            );
-          },
+            ),
+            SizedBox(height: 10),
+            GetX<SelectAlarmSoundController>(
+              builder: (con) {
+                bool isSelected = controller.selectedSound.value == -1;
+                return CustomSoundWidget(
+                  isPlaying: isSelected && controller.musicPlaying.value,
+                  musicName: isSelected
+                      ? controller.customSound!.name
+                      : "Chose from this device",
+                  onTap: () {
+                    controller.selectFromDevice();
+                  },
+                );
+              },
+            )
+          ],
         ),
       ),
       action: PrimaryButton(
         text: "Apply",
         onPressed: () async {
-          final sound = await controller.saveSound();
-          onSave(sound);
+          Get.back();
+          onSave(await controller.saveSound());
         },
       ),
     );

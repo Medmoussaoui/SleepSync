@@ -57,6 +57,7 @@ dependencies:
   android_alarm_manager_plus: ^4.0.6
   wakelock_plus: ^1.2.10
   flutter_foreground_task: ^8.17.0
+  volume_controller: ^3.2.0
   
 
 dev_dependencies:

@@ -25,7 +25,7 @@ class SleepMetricItem extends StatelessWidget {
           SizedBox(height: 10),
           Text(
             metricEntity.value,
-            style: AppTextStyles.headline4medium,
+            style: AppTextStyles.headline4medium.copyWith(),
           ),
           SizedBox(height: 7),
           Text(

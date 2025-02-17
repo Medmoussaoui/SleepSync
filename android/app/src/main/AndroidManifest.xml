@@ -13,7 +13,8 @@
     <application
         android:label="sleepcyclesapp"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true">
 
         <receiver android:name=".ServiceAlarmReceiver"
             android:enabled="true"
@@ -59,7 +60,7 @@
         <activity
             android:name=".MainActivity"
             android:showWhenLocked="false"
-            android:turnScreenOn="false"
+            android:showOnLockScreen="false"
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""

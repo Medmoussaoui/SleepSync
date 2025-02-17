@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:sleepcyclesapp/components/current_time_widget.dart';
 import 'package:sleepcyclesapp/components/custom_icon.dart';
@@ -16,6 +17,7 @@ class SayGoodMorningOrNightWithTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isNight = isNightTime();
+    Color opacityWhite = AppColors.white.withOpacity(0.8);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,15 +26,17 @@ class SayGoodMorningOrNightWithTime extends StatelessWidget {
           children: [
             Text(
               isNight ? "Good Night," : "Good Morning,",
-              style: AppTextStyles.headline2medium,
-            ),
+              style: AppTextStyles.headline2medium.copyWith(
+                color: opacityWhite,
+              ),
+            ).animate(delay: 350.ms).moveY().fade(),
             SizedBox(height: 2),
             CurrentTimeWidget(
               style: AppTextStyles.subtitle3Light.copyWith(
-                color: AppColors.white,
+                color: opacityWhite,
               ),
               includeDayName: true,
-            ),
+            ).animate(delay: 650.ms).fade(),
           ],
         ),
         Spacer(),
@@ -45,7 +49,7 @@ class SayGoodMorningOrNightWithTime extends StatelessWidget {
             icon: AppIcons.settings,
             size: 24,
           ),
-        )
+        ).animate(delay: 750.ms).scale().fade()
       ],
     );
   }

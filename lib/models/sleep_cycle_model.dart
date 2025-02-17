@@ -53,14 +53,14 @@ class SleepCycleModel {
   }
 
   double get progress {
-    int cyclesToMitunes = (cycles * Settings.cycleMinute).floor();
-    return ((1 / cyclesToMitunes) * totalSleepDuration.inMinutes);
+    final int totalMinutes = (cycles * Settings.cycleMinute).floor();
+    if (totalMinutes == 0) return 0.0; // Prevent division by zero
+    return (totalSleepDuration.inMinutes / totalMinutes).clamp(0.0, 1.0);
   }
 
   /// Convert to Map (for database storage)
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'cycles': cycles,
       'date': date.toIso8601String(),
       'startTime': startTime?.toIso8601String(),

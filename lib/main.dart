@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fullscreen_window/fullscreen_window.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sleepcyclesapp/components/CustomTouchScreenLisener/widget.dart';
 import 'package:sleepcyclesapp/routes.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
 import 'package:sleepcyclesapp/utils/hive_database.dart';
@@ -11,11 +10,16 @@ import 'package:sleepcyclesapp/utils/pages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppAudioPlayer.initial();
-  FullScreenWindow.setFullScreen(true); // enter fullscreen
   await HiveDatabase.initial();
-  // await AndroidAlarmManager.initialize(); // Initialize AlarmManager
-  // FlutterForegroundTask.initCommunicationPort();
-  // initServiceForeground();
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    systemNavigationBarColor: AppColors.backgroundColor, // Your nav bar color
+    systemNavigationBarIconBrightness:
+        Brightness.light, // Optional: for nav bar icons
+  ));
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
 
   runApp(const MyApp());
 }
@@ -26,18 +30,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return CustomTouchScreenLisener(
-      child: GetMaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.onBoardingScreen,
-        getPages: pages,
-        theme: ThemeData(
-          applyElevationOverlayColor:
-              false, // Prevents dark mode color filtering
-          appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(color: AppColors.white),
-          ),
+    return GetMaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      initialRoute: AppRoutes.onBoardingScreen,
+      getPages: pages,
+      theme: ThemeData(
+        applyElevationOverlayColor: false, // Prevents dark mode color filtering
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(color: AppColors.white),
         ),
       ),
     );

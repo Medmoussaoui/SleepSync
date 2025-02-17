@@ -32,7 +32,6 @@ class CustomTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-
       borderRadius: BorderRadius.circular(13),
       onTap: onTap,
       child: Container(
@@ -46,6 +45,7 @@ class CustomTile extends StatelessWidget {
           ),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Leading Custom Icon
             if (leadingIcon != null) ...[
@@ -55,6 +55,7 @@ class CustomTile extends StatelessWidget {
             // Title & Subtitle
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(

@@ -75,6 +75,7 @@ class ClockCounterState extends State<ClockCounter> {
             AppImages.testClock,
             width: 300,
             height: 300,
+            opacity: AlwaysStoppedAnimation(0.8),
           ),
         ).animate().fade(duration: 500.ms),
       ),
