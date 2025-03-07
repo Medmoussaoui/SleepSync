@@ -77,7 +77,7 @@ class CustomDialog extends StatelessWidget {
             .moveY(
               begin: 150,
               end: 0,
-              duration: 650.ms,
+              duration: 500.ms,
               curve: Curves.fastEaseInToSlowEaseOut,
             )
             .fade(duration: 450.ms)

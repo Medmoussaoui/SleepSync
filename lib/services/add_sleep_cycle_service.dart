@@ -9,7 +9,7 @@ class AddSleepCycleService {
     final db = await _dbHelper.database;
     final id = await db.insert('sleep_cycles', sleepCycle.toMap());
     sleepCycle.id = id;
-    await HiveDatabase.db.put("sleep_cycles", sleepCycle.toMap());
+    await HiveDatabase.db.put("currentSleepSession", sleepCycle.toMap());
     return id;
   }
 }

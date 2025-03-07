@@ -70,7 +70,7 @@ class SleepCycleModel {
   }
 
   /// Create instance from Map (for database retrieval)
-  factory SleepCycleModel.fromMap(Map<String, dynamic> map) {
+  factory SleepCycleModel.fromMap(Map<dynamic, dynamic> map) {
     return SleepCycleModel(
       id: map['id'],
       cycles: map['cycles'],

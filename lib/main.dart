@@ -11,7 +11,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppAudioPlayer.initial();
   await HiveDatabase.initial();
-
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
@@ -20,9 +19,9 @@ void main() async {
         Brightness.light, // Optional: for nav bar icons
   ));
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -44,3 +43,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+ 

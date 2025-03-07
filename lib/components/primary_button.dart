@@ -26,7 +26,7 @@ class PrimaryButton extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(13),
-              color: Color(0xff713E84),
+              color: Color(0xff304D79),
             ),
           ),
         ),

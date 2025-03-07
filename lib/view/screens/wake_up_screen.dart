@@ -60,7 +60,7 @@ class WakeUpScreen extends StatelessWidget {
                         onPressed: () {
                           controller.snoozeFor5Min();
                         },
-                        text: "Snooze for 10 min ",
+                        text: "Snooze for 5 min ",
                         icon: CustomIcon(
                           icon: AppIcons.timer,
                           size: 15,

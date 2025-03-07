@@ -2,27 +2,28 @@ package com.example.sleepcyclesapp
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.PowerManager
-import android.view.WindowManager
+import com.example.sleepcyclesapp.AlarmScheduler.setAlarm
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-
 
 
 class MainActivity : FlutterActivity() {
 
     private val CHANEEL_OVERLAY_SCREEN = "com.example.sleepcyclesapp/overlay_lock_screen"
     private val CHANNEL_ALARM_SCHEDULE = "com.example.sleepcyclesapp/alarm_schedule"
+    private val CHANNEL_APP_CLOSER = "com.example.sleepcyclesapp/app_closer"
+
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         overLockScreenChanel(flutterEngine)
         alarmScheduleChannel(flutterEngine)
+        appCloserInitialChannel(flutterEngine)
+        newAlarmSchedule(flutterEngine)
     }
 
     private fun overLockScreenChanel(flutterEngine: FlutterEngine){
@@ -88,6 +89,46 @@ class MainActivity : FlutterActivity() {
         context.stopService(serviceIntent)
     }
 
+    private fun appCloserInitialChannel(flutterEngine: FlutterEngine){
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_APP_CLOSER).setMethodCallHandler({
+            call,
+            result ->
+            when (call.method) {
+                "closeApp" -> {
+                    finishAndRemoveTask()
+                    result.success(null)
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+        })
+    }
+
+    fun newAlarmSchedule(flutterEngine: FlutterEngine) {
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "newAlarmScheduleChannel").setMethodCallHandler({
+                call,
+                result ->
+            when (call.method) {
+                "setAlarm" -> {
+                    val timeInMillis = call.argument<Long>("timeInMillis")
+                    if (timeInMillis != null) {
+                        setAlarm(applicationContext, timeInMillis);
+                        result.success(null)
+                    } else {
+                        result.error("INVALID_TIME", "Time not provided", null)
+                    }
+                }
+                "cancelAlarm" -> {
+                    AlarmScheduler.cancelAlarm(applicationContext);
+                    result.success(null)
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+        })
+    }
 }
 
 

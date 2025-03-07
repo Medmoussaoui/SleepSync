@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sleepcyclesapp/models/sleep_cycle_model.dart';
-import 'package:sleepcyclesapp/services/add_sleep_cycle_temporary.dart';
+import 'package:sleepcyclesapp/services/set_sleep_cycle_temporary.dart';
 import 'package:sleepcyclesapp/services/enable_desible_noise_tracking.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 import 'package:sleepcyclesapp/utils/settings.dart';
@@ -16,9 +16,9 @@ class BeginCyclesScreenController extends GetxController {
   late bool noiseTracking;
   late String alarmSoundName;
 
-  Future<SleepCycleModel> createSleepCycleSession() async {
+  Future<SleepCycleModel> _createSleepCycleSession() async {
     final model = SleepCycleModel(cycles: cycles, date: DateTime.now());
-    await AddSleepCycleTemporaryService().add(model);
+    await SetSleepCycleTemporaryService().add(model);
     return model;
   }
 
@@ -29,7 +29,7 @@ class BeginCyclesScreenController extends GetxController {
     }
     await Future.delayed(Duration(seconds: 1));
     Vibration.vibrate(preset: VibrationPreset.singleShortBuzz);
-    final model = await createSleepCycleSession();
+    final model = await _createSleepCycleSession();
     Get.offAllNamed(
       AppRoutes.introSleepScreen,
       arguments: {"session": model},

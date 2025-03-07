@@ -1,13 +1,17 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:sleepcyclesapp/components/primary_button.dart';
 import 'package:sleepcyclesapp/controllers/background_image.dart';
 import 'package:sleepcyclesapp/controllers/home_screen_controller.dart';
+import 'package:sleepcyclesapp/utils/music_player.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 import 'package:sleepcyclesapp/view/widgets/homeScreen/build_sleep_metrics.dart';
 import 'package:sleepcyclesapp/view/widgets/homeScreen/say_good_night_or_morning.dart';
 import 'package:sleepcyclesapp/view/widgets/homeScreen/sleep_information.dart';
+import 'package:vibration/vibration.dart';
+import 'package:vibration/vibration_presets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -40,13 +44,7 @@ class HomeScreen extends StatelessWidget {
                 PrimaryButton(
                   text: "Begin Sleep Cycles",
                   onPressed: () async {
-                    await Future.delayed(250.ms);
-                    //  await requestOverlayPermission();
-                    // Future.delayed(const Duration(seconds: 20), () {
-                    //   print("--------> CallBack function runned");
-                    //   OverlayLockScreen.wakeUpDevice();
-                    // });
-                    // OverlayLockScreen.showOverlay();
+                    await Future.delayed(100.ms);
                     Get.toNamed(AppRoutes.beginCyclesScreen);
                   },
                 ).animate(delay: 120.ms).moveY(begin: 50, end: 0).fade(),

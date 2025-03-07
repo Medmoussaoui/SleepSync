@@ -13,8 +13,7 @@ import 'package:sleepcyclesapp/services/SleepTrackerService/service.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/sound_detector.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/vibration_notifier.dart';
 import 'package:sleepcyclesapp/services/add_sleep_cycle_service.dart';
-import 'package:sleepcyclesapp/services/add_sleep_cycle_temporary.dart';
-import 'package:sleepcyclesapp/utils/hive_database.dart';
+import 'package:sleepcyclesapp/services/set_sleep_cycle_temporary.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class SleepTrackerScreenController extends GetxController {
@@ -27,10 +26,12 @@ class SleepTrackerScreenController extends GetxController {
 
   stopTracking() async {
     trackerService.stopTracking();
+
+    // sleep for a while
     if (sleepCycleModel.startTime != null) {
       sleepCycleModel.endTime = DateTime.now();
       await AddSleepCycleService().addSleepCycle(sleepCycleModel);
-      await AlarmScheduleService.cancelService();
+      await AlarmScheduleService.cancelAlarm();
     }
     exit(1);
   }
@@ -46,12 +47,13 @@ class SleepTrackerScreenController extends GetxController {
   void _userSleep() {
     WakelockPlus.disable();
     sleepCycleModel.startTime = trackerService.sleepStartTime;
-    HiveDatabase.db.put("currentSleepSession", sleepCycleModel.toMap());
+    SetSleepCycleTemporaryService().add(sleepCycleModel);
 
-    final fakeTime = Duration(minutes: 1);
-    final alarmWakeUpTime = trackerService.sleepStartTime!.add(fakeTime);
-    // final alarmWakeUpTime = trackerService.sleepStartTime!.add(sleepCycleModel.cyclesDuration);
-    AlarmScheduleService.scheduleService(alarmWakeUpTime);
+    // final fakeTime = Duration(minutes: 1);
+    // final alarmWakeUpTime = trackerService.sleepStartTime!.add(fakeTime);
+    final alarmWakeUpTime = sleepCycleModel.startTime!.add(sleepCycleModel.cyclesDuration);
+    // final time = DateTime(2025,2,18,12,50,0);
+    AlarmScheduleService.setAlarm(alarmWakeUpTime);
     Future.delayed(2.seconds, () => update());
     // Update UI every minute while sleeping
     _updateProgressEveryMinute();
@@ -65,13 +67,6 @@ class SleepTrackerScreenController extends GetxController {
   }
 
   void _userAwake() => sleepTimer?.cancel();
-
-  setSleepSession() {
-    final model =
-        SleepCycleModel(cycles: Get.arguments["cycles"], date: DateTime.now());
-    AddSleepCycleTemporaryService().add(model);
-    return model;
-  }
 
   void initial() {
     final model = Get.arguments["session"];
@@ -109,7 +104,7 @@ class SleepTrackerScreenController extends GetxController {
     trackerService = SleepTrackerService(
       responseDetector: ResponseDetector(
         motionDetector: MotionDetector(),
-        soundDetector: SoundDetector(),
+        soundDetector: DetectUserSoundResponce(),
       ),
       vibrationNotifier: VibrationNotifier(),
     );

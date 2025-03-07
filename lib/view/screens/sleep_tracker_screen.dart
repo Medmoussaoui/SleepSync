@@ -24,8 +24,8 @@ class SleepTrackerScreen extends StatelessWidget {
         controller: controller.screenLifeState,
         child: Scaffold(
           backgroundColor: Colors.black,
-          body: WillPopScope(
-            onWillPop: () async => false,
+          body: PopScope(
+            canPop: false,
             child: SwipeUp(
               textColor: AppColors.relaxGrey,
               text: "Swipe up to end",

@@ -3,10 +3,15 @@ import 'package:get/get.dart';
 import 'package:sleepcyclesapp/Data/sleep_stages.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/response_detector.dart';
 import 'package:sleepcyclesapp/services/SleepTrackerService/vibration_notifier.dart';
+import 'package:sleepcyclesapp/services/new_sleep_delay_persontage.dart';
+import 'package:sleepcyclesapp/usecases/sleep_time_estimator.dart';
+import 'package:sleepcyclesapp/utils/check_sleep_interval.dart';
 import 'package:sleepcyclesapp/utils/music_player.dart';
 import 'package:sleepcyclesapp/utils/sounds.dart';
 
 class SleepTrackerService {
+  final sleepTimeEstimator =
+      SleepTimeEstimator(sleepDelayStorage: NewsleepDelayPercentage());
   final IResponseDetector responseDetector;
   final VibrationNotifier vibrationNotifier;
 
@@ -14,9 +19,8 @@ class SleepTrackerService {
   RxBool isTracking = false.obs;
   DateTime? sleepStartTime;
   Timer? checkTimer;
-  int checkInterval = 1; // Start with 3 minute
+  CheckSleepInterval checkInterval = CheckSleepInterval();
 
-  /// TODO: implement this feature ti set near expected sleep at time
   DateTime? lastCheckTime;
 
   SleepTrackerService({
@@ -41,15 +45,16 @@ class SleepTrackerService {
 
   __detectNotSleepYet() {
     lastCheckTime = DateTime.now();
-    AppAudioPlayer.playFromAsset(AppSounds.confirm, volume: 0.32);
+    AppAudioPlayer.playFromAsset(AppSounds.confirm, volume: 0.35);
     sleepStage.value = SleepStages.stillAwake;
     return _scheduleCheck();
   }
 
   void _scheduleCheck() {
     checkTimer?.cancel();
-    _checkingSoon(checkInterval);
-    checkTimer = Timer(Duration(minutes: checkInterval), () async {
+    final interval = checkInterval.interval;
+    _checkingSoon(interval);
+    checkTimer = Timer(Duration(minutes: interval), () async {
       if (!isTracking.value) return;
       int trys = 1;
       while (trys <= 3) {
@@ -57,7 +62,6 @@ class SleepTrackerService {
         var responded = responseDetector.waitForResponse();
         vibrationNotifier.sendVibration();
         if (await responded) {
-          lastCheckTime = DateTime.now();
           return __detectNotSleepYet();
         }
         if (trys == 3) return _detectSleep();
@@ -66,17 +70,11 @@ class SleepTrackerService {
     });
   }
 
-  void _detectSleep() {
+  _detectSleep() async {
     print("-----------> User sleep ");
     checkTimer?.cancel();
     sleepStartTime = DateTime.now();
     sleepStage.value = SleepStages.asleep;
-    // if (lastCheckTime != null) {
-    //   final difference = sleepStartTime!.difference(lastCheckTime!);
-    //   final sleepPeriod = difference.inSeconds * 0.35; // 35% of the time elapsed
-    //   // expected sleep at time
-    //   sleepStartTime = sleepStartTime!.subtract(Duration(seconds: sleepPeriod.toInt()));
-    // }
   }
 
   void stopTracking() {

@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 
 @pragma('vm:entry-point')
 class AlarmScheduleService {
-  static const MethodChannel _channel =
-      MethodChannel('com.example.sleepcyclesapp/alarm_schedule');
+  // static const MethodChannel _channel = MethodChannel('com.example.sleepcyclesapp/alarm_schedule');
+  static const MethodChannel _channel = MethodChannel('newAlarmScheduleChannel');
 
-  static Future<void> scheduleService(DateTime dateTime) async {
+  static Future<void> setAlarm(DateTime dateTime) async {
     try {
       final timeInMillis = dateTime.millisecondsSinceEpoch;
       await _channel.invokeMethod('setAlarm', {"timeInMillis": timeInMillis});
@@ -16,23 +16,11 @@ class AlarmScheduleService {
     }
   }
 
-  static Future<void> cancelService() async {
+  static Future<void> cancelAlarm() async {
     try {
       await _channel.invokeMethod('cancelAlarm');
     } catch (e) {
       print("Error scheduling service: $e");
     }
-  }
-}
-
-Future<void> scheduleService(DateTime dateTime) async {
-  try {
-    const MethodChannel _channel =
-        MethodChannel('com.example.sleepcyclesapp/alarm_schedule');
-
-    final timeInMillis = dateTime.millisecondsSinceEpoch;
-    await _channel.invokeMethod('setAlarm', {"timeInMillis": timeInMillis});
-  } catch (e) {
-    print("Error scheduling service: $e");
   }
 }

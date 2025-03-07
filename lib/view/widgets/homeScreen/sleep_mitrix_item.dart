@@ -12,7 +12,7 @@ class SleepMetricItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.white.withOpacity(0.05),
         borderRadius: BorderRadius.circular(13),
@@ -25,7 +25,7 @@ class SleepMetricItem extends StatelessWidget {
           SizedBox(height: 10),
           Text(
             metricEntity.value,
-            style: AppTextStyles.headline4medium.copyWith(),
+            style: AppTextStyles.headline4medium,
           ),
           SizedBox(height: 7),
           Text(
