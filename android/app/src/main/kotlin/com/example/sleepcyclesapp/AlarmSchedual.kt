@@ -11,7 +11,6 @@ import io.flutter.plugin.common.MethodChannel
 
 
 object AlarmScheduler {
-    private val CHANNEL_ALARM_SCHEDULE = "com.example.sleepcyclesapp/new_alarm_schedule"
 
     fun setAlarm(context: Context, timeInMillis: Long) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

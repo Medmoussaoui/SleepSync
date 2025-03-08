@@ -6,7 +6,7 @@ import 'package:sleepcyclesapp/services/SleepTrackerService/vibration_notifier.d
 import 'package:sleepcyclesapp/services/new_sleep_delay_persontage.dart';
 import 'package:sleepcyclesapp/usecases/sleep_time_estimator.dart';
 import 'package:sleepcyclesapp/utils/check_sleep_interval.dart';
-import 'package:sleepcyclesapp/utils/music_player.dart';
+import 'package:sleepcyclesapp/utils/functions/open_speatch.dart';
 import 'package:sleepcyclesapp/utils/sounds.dart';
 
 class SleepTrackerService {
@@ -45,7 +45,7 @@ class SleepTrackerService {
 
   __detectNotSleepYet() {
     lastCheckTime = DateTime.now();
-    AppAudioPlayer.playFromAsset(AppSounds.confirm, volume: 0.35);
+    openSpeech(AppSounds.keepRelax);
     sleepStage.value = SleepStages.stillAwake;
     return _scheduleCheck();
   }

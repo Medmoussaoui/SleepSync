@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sleepcyclesapp/routes.dart';
 import 'package:sleepcyclesapp/utils/colors.dart';
+import 'package:sleepcyclesapp/utils/functions/fill_mobile_screen.dart';
 import 'package:sleepcyclesapp/utils/hive_database.dart';
 import 'package:sleepcyclesapp/utils/music_player.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
@@ -11,17 +12,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppAudioPlayer.initial();
   await HiveDatabase.initial();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-    systemNavigationBarColor: AppColors.backgroundColor, // Your nav bar color
-    systemNavigationBarIconBrightness:
-        Brightness.light, // Optional: for nav bar icons
-  ));
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+  fillMobileScreen();
+
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -43,6 +37,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
- 

@@ -8,7 +8,8 @@ class AppAudioPlayer {
     AudioCache.instance = AudioCache(prefix: AppSounds.root);
   }
 
-  static AudioPlayer playFromAsset(String name, {double? volume}) {
+  static Future<AudioPlayer> playFromAsset(String name,
+      {double? volume}) async {
     final instance = AudioPlayer();
     instance.play(AssetSource(name), volume: volume);
     return instance;

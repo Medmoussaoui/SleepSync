@@ -13,7 +13,7 @@ class SeeTheSience extends StatelessWidget {
       "See the sience",
       style: TextStyle(
         fontSize: 12.0,
-        color: AppColors.accentTextColor,
+        color: AppColors.secondaryTextColor,
         fontWeight: FontWeight.w400,
       ),
       textAlign: TextAlign.center,

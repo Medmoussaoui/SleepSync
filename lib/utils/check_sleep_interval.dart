@@ -1,6 +1,6 @@
 class CheckSleepInterval {
-  List<int> intervals = [2, 1];
-  List<int> trys = [4, 1];
+  List<int> intervals = [4, 2];
+  List<int> trys = [2, 2];
 
   int _pointer = 0;
   int _trys = 0;

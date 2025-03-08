@@ -15,55 +15,49 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: Stack(
-        children: [
-          // Background Picture
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(AppImages.nightScreen), fit: BoxFit.cover),
-            ),
-          )
-              .animate(delay: 200.ms)
-              .fade(duration: 1000.ms, curve: Curves.easeInOut),
-          Padding(
-            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 30),
-            child: Column(
-              children: [
-                /// the center image
-                Spacer(),
-
-                /// Title & description
-                Expanded(
-                  child: Column(
-                    children: [
-                      OnBoardingTitle(title: "Start Your First Night!")
-                          .animate()
-                          .fadeIn(duration: 500.ms)
-                          .slideY(begin: -0.5, end: 0, curve: Curves.easeOut),
-                      SizedBox(height: 15),
-                      OnBoardingDescription(
-                              description:
-                                  "Set your cycles now and experience better mornings!")
-                          .animate()
-                          .fadeIn(duration: 700.ms)
-                          .slideY(begin: 0.5, end: 0, curve: Curves.easeOut),
-                      Spacer(),
-                      PrimaryButton(
-                        text: "Set My Cycles",
-                        onPressed: () {
-                          Get.offAllNamed(AppRoutes.homeScreen);
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      SeeTheSience().animate(delay: 300.ms).fade(),
-                    ],
+      body: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 25),
+        child: Column(
+          children: [
+            /// the center image
+            Expanded(
+              child: OnBoardingImage(assetImage: AppImages.moon, imageSize: 120)
+                  .animate(delay: 300.ms)
+                  .fade(
+                    duration: 600.ms,
+                    curve: Curves.easeIn,
                   ),
-                ),
-              ],
             ),
-          ),
-        ],
+
+            /// Title & description
+            Expanded(
+              child: Column(
+                children: [
+                  OnBoardingTitle(title: "Start Your First Night!")
+                      .animate()
+                      .fadeIn(duration: 500.ms)
+                      .slideY(begin: -0.5, end: 0, curve: Curves.easeOut),
+                  SizedBox(height: 15),
+                  OnBoardingDescription(
+                          description:
+                              "Set your cycles now and experience better mornings!")
+                      .animate()
+                      .fadeIn(duration: 700.ms)
+                      .slideY(begin: 0.5, end: 0, curve: Curves.easeOut),
+                  Spacer(),
+                  PrimaryButton(
+                    text: "Set My Cycles",
+                    onPressed: () {
+                      Get.offAllNamed(AppRoutes.homeScreen);
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  SeeTheSience().animate(delay: 300.ms).fade(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

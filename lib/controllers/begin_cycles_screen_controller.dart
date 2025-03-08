@@ -3,6 +3,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sleepcyclesapp/models/sleep_cycle_model.dart';
 import 'package:sleepcyclesapp/services/set_sleep_cycle_temporary.dart';
 import 'package:sleepcyclesapp/services/enable_desible_noise_tracking.dart';
+import 'package:sleepcyclesapp/utils/functions/fill_mobile_screen.dart';
+import 'package:sleepcyclesapp/utils/functions/request_microphone_permission.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 import 'package:sleepcyclesapp/utils/settings.dart';
 import 'package:vibration/vibration.dart';
@@ -27,7 +29,9 @@ class BeginCyclesScreenController extends GetxController {
       final res = await Permission.scheduleExactAlarm.request();
       if (!res.isGranted) return;
     }
+    if (!await requestMicrophonePermission()) return;
     await Future.delayed(Duration(seconds: 1));
+    fillMobileScreen(hideStatusBar: true);
     Vibration.vibrate(preset: VibrationPreset.singleShortBuzz);
     final model = await _createSleepCycleSession();
     Get.offAllNamed(
