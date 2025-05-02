@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:sleepcyclesapp/components/primary_button.dart';
 import 'package:sleepcyclesapp/controllers/background_image.dart';
 import 'package:sleepcyclesapp/controllers/home_screen_controller.dart';
-import 'package:sleepcyclesapp/utils/functions/fill_mobile_screen.dart';
 import 'package:sleepcyclesapp/utils/pages.dart';
 import 'package:sleepcyclesapp/view/widgets/homeScreen/build_sleep_metrics.dart';
 import 'package:sleepcyclesapp/view/widgets/homeScreen/say_good_night_or_morning.dart';

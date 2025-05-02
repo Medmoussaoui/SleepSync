@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:sleepcyclesapp/components/CustomTouchScreenLisener/controller.dart';
 
 class MotionDetector {
-
   Future<bool> detectScreenTouch() async {
     Completer<bool> touchDetected = Completer();
 
@@ -16,10 +15,9 @@ class MotionDetector {
       }
     });
 
-    return touchDetected.future.timeout(Duration(seconds: 8), onTimeout: () {
+    return touchDetected.future.timeout(Duration(seconds: 10), onTimeout: () {
       subscription?.cancel();
       return false;
     });
   }
-
 }

@@ -14,7 +14,7 @@ class IntroSleepScreen extends StatelessWidget {
 
   Future<void> initial() async {
     maxVolume();
-    _playDramaSound();
+    // _playDramaSound();
   }
 
   Future _playDramaSound() async {

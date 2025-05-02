@@ -5,8 +5,7 @@ import 'package:sleepcyclesapp/services/SleepTrackerService/response_detector.da
 import 'package:sleepcyclesapp/services/SleepTrackerService/vibration_notifier.dart';
 import 'package:sleepcyclesapp/services/new_sleep_delay_persontage.dart';
 import 'package:sleepcyclesapp/usecases/sleep_time_estimator.dart';
-import 'package:sleepcyclesapp/utils/check_sleep_interval.dart';
-import 'package:sleepcyclesapp/utils/functions/open_speatch.dart';
+import 'package:sleepcyclesapp/utils/music_player.dart';
 import 'package:sleepcyclesapp/utils/sounds.dart';
 
 class SleepTrackerService {
@@ -19,7 +18,10 @@ class SleepTrackerService {
   RxBool isTracking = false.obs;
   DateTime? sleepStartTime;
   Timer? checkTimer;
-  CheckSleepInterval checkInterval = CheckSleepInterval();
+  // CheckSleepInterval checkInterval = CheckSleepInterval();
+  int checkInterval = 5;
+
+  final int _max_check_sleep_trys = 2;
 
   DateTime? lastCheckTime;
 
@@ -34,7 +36,7 @@ class SleepTrackerService {
     _scheduleCheck();
   }
 
-  void _checkingSoon(int checkInterval) {
+  void _checkingSoon() {
     int closeToChecking = (checkInterval * 60 / 2).round();
     late Timer timer;
     timer = Timer(Duration(seconds: closeToChecking), () {
@@ -43,28 +45,33 @@ class SleepTrackerService {
     });
   }
 
+  downCheckInterval() {
+    if (checkInterval != 2) checkInterval = 2;
+  }
+
   __detectNotSleepYet() {
-    lastCheckTime = DateTime.now();
-    openSpeech(AppSounds.keepRelax);
+    downCheckInterval();
+    // openSpeech(AppSounds.keepRelax);
+    AppAudioPlayer.playFromAsset(AppSounds.confirm, volume: 0.14);
     sleepStage.value = SleepStages.stillAwake;
     return _scheduleCheck();
   }
 
   void _scheduleCheck() {
     checkTimer?.cancel();
-    final interval = checkInterval.interval;
-    _checkingSoon(interval);
-    checkTimer = Timer(Duration(minutes: interval), () async {
+    _checkingSoon();
+    checkTimer = Timer(Duration(minutes: checkInterval), () async {
+      lastCheckTime = DateTime.now();
       if (!isTracking.value) return;
       int trys = 1;
-      while (trys <= 3) {
+      while (trys <= _max_check_sleep_trys) {
         sleepStage.value = SleepStages.areYouThere;
         var responded = responseDetector.waitForResponse();
         vibrationNotifier.sendVibration();
         if (await responded) {
           return __detectNotSleepYet();
         }
-        if (trys == 3) return _detectSleep();
+        if (trys == _max_check_sleep_trys) return _detectSleep();
         trys++;
       }
     });
@@ -73,7 +80,8 @@ class SleepTrackerService {
   _detectSleep() async {
     print("-----------> User sleep ");
     checkTimer?.cancel();
-    sleepStartTime = DateTime.now();
+    sleepStartTime =
+        (lastCheckTime ?? DateTime.now()).subtract(Duration(seconds: 12));
     sleepStage.value = SleepStages.asleep;
   }
 

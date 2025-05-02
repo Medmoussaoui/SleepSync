@@ -39,7 +39,7 @@ class DetectUserSoundResponce {
       }
     });
 
-    return soundDetected.future.timeout(8.seconds, onTimeout: () {
+    return soundDetected.future.timeout(10.seconds, onTimeout: () {
       subscription?.cancel();
       return false;
     });

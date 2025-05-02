@@ -21,7 +21,8 @@ class ResponseDetector implements IResponseDetector {
     _listenForTouch(responseDetected);
     _listenForSound(responseDetected);
 
-    return responseDetected.future.timeout(Duration(seconds: 8), onTimeout: () {
+    return responseDetected.future.timeout(Duration(seconds: 10),
+        onTimeout: () {
       return false;
     });
   }
