@@ -37,10 +37,6 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
-
-    aaptOptions {
-        noCompress 'tflite'
-    }
 }
 
 flutter {
@@ -49,5 +45,4 @@ flutter {
 
 dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-    implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:+'
 }

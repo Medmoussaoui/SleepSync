@@ -19,7 +19,7 @@ class ResponseDetector implements IResponseDetector {
     Completer<bool> responseDetected = Completer();
 
     _listenForTouch(responseDetected);
-    _listenForSound(responseDetected);
+    // _listenForSound(responseDetected);
 
     return responseDetected.future.timeout(Duration(seconds: 10),
         onTimeout: () {
@@ -34,10 +34,10 @@ class ResponseDetector implements IResponseDetector {
     }
   }
 
-  Future _listenForSound(Completer<bool> responseDetected) async {
-    bool soundDetected = await soundDetector.detectSound();
-    if (soundDetected && !responseDetected.isCompleted) {
-      responseDetected.complete(true);
-    }
-  }
+  // Future _listenForSound(Completer<bool> responseDetected) async {
+  //   bool soundDetected = await soundDetector.detectSound();
+  //   if (soundDetected && !responseDetected.isCompleted) {
+  //     responseDetected.complete(true);
+  //   }
+  // }
 }

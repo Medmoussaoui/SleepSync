@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:sleepcyclesapp/utils/sounds.dart';
 
 class AppAudioPlayer {
-  static late AudioCache audioCash;
+  static AudioCache get audioCash => AudioCache.instance;
 
   static initial() {
     AudioCache.instance = AudioCache(prefix: AppSounds.root);

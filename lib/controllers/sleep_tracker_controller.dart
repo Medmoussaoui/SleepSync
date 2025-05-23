@@ -26,7 +26,6 @@ class SleepTrackerScreenController extends GetxController {
 
   stopTracking() async {
     trackerService.stopTracking();
-
     // sleep for a while
     if (sleepCycleModel.startTime != null) {
       sleepCycleModel.endTime = DateTime.now();
@@ -50,8 +49,7 @@ class SleepTrackerScreenController extends GetxController {
     SetSleepCycleTemporaryService().add(sleepCycleModel);
     // final fakeTime = Duration(minutes: 1);
     // final alarmWakeUpTime = trackerService.sleepStartTime!.add(fakeTime);
-    final alarmWakeUpTime =
-        sleepCycleModel.startTime!.add(sleepCycleModel.cyclesDuration);
+    final alarmWakeUpTime = sleepCycleModel.startTime!.add(sleepCycleModel.cyclesDuration);
     // final time = DateTime(2025,2,18,12,50,0);
     AlarmScheduleService.setAlarm(alarmWakeUpTime);
     Future.delayed(2.seconds, () => update());

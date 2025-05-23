@@ -19,6 +19,7 @@ class SleepTrackerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SleepTrackerScreenController());
+
     return CustomTouchScreenLisener(
       child: ScreenLifeCycleState(
         controller: controller.screenLifeState,

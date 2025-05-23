@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         applyElevationOverlayColor: false, // Prevents dark mode color filtering
         appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(color: AppColors.white),
+          iconTheme: IconThemeData(color: AppColors.relaxWhite),
         ),
       ),
     );
